@@ -22,5 +22,8 @@ public class Brand {
     private boolean enable;
     @OneToMany(mappedBy = "brand")
     private List<Product> products = new ArrayList<>();
+    @OneToOne
+    @JoinColumn(name = "avatar")
+    private Image avatar;
 
 }

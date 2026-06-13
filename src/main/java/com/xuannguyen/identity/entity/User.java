@@ -50,4 +50,10 @@ public class User extends  BaseEntity {
     @OneToMany(mappedBy = "user")
     @JsonBackReference
     Set<Category> categories;
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference
+    Set<Post> posts;
+    @OneToOne
+    @JoinColumn(name = "avatar")
+    private Image avatar;
 }

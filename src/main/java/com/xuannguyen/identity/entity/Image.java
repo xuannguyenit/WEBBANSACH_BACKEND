@@ -18,4 +18,5 @@ public class Image {
     private Long size;
     @Lob
     private byte[] data;
+
 }

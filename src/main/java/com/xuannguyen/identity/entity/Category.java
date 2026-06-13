@@ -21,5 +21,8 @@ public class Category {
     @ManyToOne
     @JoinColumn (name = "user_id")
     private User user;
+    @OneToOne
+    @JoinColumn(name = "avatar")
+    private Image avatar;
 
 }

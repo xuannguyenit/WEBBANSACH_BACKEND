@@ -5,7 +5,9 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,9 +33,15 @@ public class Product extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "brand_id", nullable = true)
     private Brand brand;
-    @ManyToMany
-    @JoinTable(name = "product_image",joinColumns = @JoinColumn(name="product_id"),inverseJoinColumns = @JoinColumn(name="image_id"))
-    private Set<Image> images = new HashSet<>();
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image thumbnail;
+    @OneToMany(
+            mappedBy = "product",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<ProductImage> images = new ArrayList<>();
     private LocalDate createDate = LocalDate.now();
     // sản pham thuoc user
     @ManyToOne

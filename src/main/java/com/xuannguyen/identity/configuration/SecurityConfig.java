@@ -19,9 +19,28 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private static final String[] PUBLIC_ENDPOINTS = {
-        "/users/registration", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh",
-            "users/*"
+            "/users/registration",
+            "/auth/introspect",
+            "/auth/logout",
+            "/auth/refresh",
+            "users/*",
+            "/auth/token"
+
     };
+    private static final String[] PUBLIC_GET_ENDPOINTS = {
+            "/categories",
+            "/images/*/view",
+    };
+    private static final String[] SWAGGER_ENDPOINTS = {
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml",
+            "/swagger-resources/**",
+            "/webjars/**",
+            "/swagger-ui.html/*"
+    };
+
 
     private final CustomJwtDecoder customJwtDecoder;
 
@@ -31,8 +50,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
-                .permitAll()
+        httpSecurity.authorizeHttpRequests(request -> request// Cho phép Swagger truy cập không cần token
+                .requestMatchers(SWAGGER_ENDPOINTS).permitAll()
+                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(HttpMethod.GET, PUBLIC_GET_ENDPOINTS).permitAll()
                 .anyRequest()
                 .authenticated());
 

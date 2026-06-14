@@ -3,10 +3,6 @@ package com.xuannguyen.identity.service;
 import java.util.HashSet;
 import java.util.List;
 
-import com.xuannguyen.identity.dto.request.ApiResponse;
-import com.xuannguyen.identity.dto.request.ProfileCreationRequest;
-import com.xuannguyen.identity.dto.response.ProfileResponse;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -23,11 +19,9 @@ import com.xuannguyen.identity.entity.Role;
 import com.xuannguyen.identity.entity.User;
 import com.xuannguyen.identity.exception.AppException;
 import com.xuannguyen.identity.exception.ErrorCode;
-import com.xuannguyen.identity.mapper.ProfileMapper;
 import com.xuannguyen.identity.mapper.UserMapper;
 import com.xuannguyen.identity.repository.RoleRepository;
 import com.xuannguyen.identity.repository.UserRepository;
-import com.xuannguyen.identity.repository.httpclient.ProfileClient;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

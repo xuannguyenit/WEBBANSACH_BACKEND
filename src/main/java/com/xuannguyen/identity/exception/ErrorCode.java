@@ -19,7 +19,14 @@ public enum ErrorCode {
     INVALID_EMAIL(1009, "Invalid email address", HttpStatus.BAD_REQUEST),
     EMAIL_IS_REQUIRED(1009, "Email is required", HttpStatus.BAD_REQUEST),
     EMAIL_EXISTED (1010, "Email đã tồn tại", HttpStatus.BAD_REQUEST),
-    ROLE_NOT_EXISTED (1011, "Role not existed", HttpStatus.NOT_FOUND)
+    ROLE_NOT_EXISTED (1011, "Role not existed", HttpStatus.NOT_FOUND),
+    CATEGORY_BY_USER_EXISTED(1012, "User đã tồn tại danh mục trên", HttpStatus.BAD_REQUEST),
+    IMAGE_NOT_EXISTED(1013, "Ảnh đại diện không tồn tại", HttpStatus.BAD_REQUEST),
+    CATEGORY_NOT_EXISTED(1014, "Category not existed", HttpStatus.NOT_FOUND),
+    FILE_NOT_UPLOAD (1015, "File upload failed", HttpStatus.INTERNAL_SERVER_ERROR),
+    FILE_TOO_LARGE(1016, "File size exceeds the maximum allowed size", HttpStatus.BAD_REQUEST),
+    FILE_NOT_SUPPORT(1017, "File type is not supported", HttpStatus.BAD_REQUEST),
+    INVALID_FILE(1018, "Invalid file", HttpStatus.BAD_REQUEST)
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

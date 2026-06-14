@@ -53,7 +53,7 @@ public class User extends  BaseEntity {
     @OneToMany(mappedBy = "user")
     @JsonBackReference
     Set<Post> posts;
-    @OneToOne
-    @JoinColumn(name = "avatar")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "avatar_id")
     private Image avatar;
 }

@@ -6,14 +6,21 @@ server:
 spring:
   application:
     name: identity
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 30MB
+      max-request-size: 30MB
+
   datasource:
     url: jdbc:postgresql://localhost:5432/ecomece_book
     username: tcdlcl
     password: tcdlcl
     driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
@@ -21,8 +28,10 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         jdbc:
           time_zone: Asia/Ho_Chi_Minh
+
   jackson:
     time-zone: Asia/Ho_Chi_Minh
+
   kafka:
     bootstrap-servers: localhost:9094
     producer:
@@ -33,11 +42,25 @@ spring:
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: true
+
 jwt:
   signerKey: "1TjXchw5FloESb63Kc+DFhTARvpWL4jUGCwfGWxuG5SIf/1y/LgJxHnMqaF6A/ij"
-  valid-duration: 3600 # in second
-  refreshable-duration: 36000 # in seconds
-
-app:
-  services:
-    profile: http://localhost:8081/profile
+  valid-duration: 3600
+  refreshable-duration: 36000

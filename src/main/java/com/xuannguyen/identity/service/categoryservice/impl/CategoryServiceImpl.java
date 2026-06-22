@@ -258,7 +258,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .name(image.getName())
                 .type(image.getType())
                 .size(image.getSize())
-                .url("/images/" + image.getId() + "/data")
+                .url("/images/" + image.getId() + "/view")
                 .build();
     }
     @Override

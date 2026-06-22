@@ -26,7 +26,15 @@ public enum ErrorCode {
     FILE_NOT_UPLOAD (1015, "File upload failed", HttpStatus.INTERNAL_SERVER_ERROR),
     FILE_TOO_LARGE(1016, "File size exceeds the maximum allowed size", HttpStatus.BAD_REQUEST),
     FILE_NOT_SUPPORT(1017, "File type is not supported", HttpStatus.BAD_REQUEST),
-    INVALID_FILE(1018, "Invalid file", HttpStatus.BAD_REQUEST)
+    INVALID_FILE(1018, "Invalid file", HttpStatus.BAD_REQUEST),
+    BRAND_NAME_ALREADY_EXISTSED(1019, "Brand name already exists", HttpStatus.BAD_REQUEST),
+    BRAND_NOT_EXISTED(404, "Brand không tồn tại", HttpStatus.NOT_FOUND),
+    INVALID_BRAND_NAME(400, "Tên brand không hợp lệ", HttpStatus.BAD_REQUEST),
+    INVALID_CATEGORY_NAME(400, "Tên category không hợp lệ", HttpStatus.BAD_REQUEST),
+    POST_NOT_EXISTED(404, "Bài viết không tồn tại", HttpStatus.NOT_FOUND),
+    POST_SLUG_ALREADY_EXISTED(400, "Slug bài viết đã tồn tại", HttpStatus.BAD_REQUEST),
+    INVALID_POST_TITLE(400, "Tiêu đề bài viết không hợp lệ", HttpStatus.BAD_REQUEST),
+    INVALID_POST_SLUG(400, "Slug bài viết không hợp lệ", HttpStatus.BAD_REQUEST);
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

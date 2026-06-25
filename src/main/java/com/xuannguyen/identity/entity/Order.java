@@ -1,9 +1,14 @@
 package com.xuannguyen.identity.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 @Entity
 @Setter
@@ -14,38 +19,29 @@ import java.util.Set;
 @Table (name = "orders")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue (strategy = GenerationType.UUID)
     private String id;
+    private Long userId;
+    private String fullName;
+    @Column(name = "email")
+    private String email;
+    @Column (nullable = false)
+    private String phone;
+    @Column (name = "address",nullable = false)
+    private String address;
+    private LocalDateTime orderTime;
+    private boolean active;
+    private String status; // trạng thái đơn hàng
+    private BigDecimal totalPrice;
+    private LocalDateTime shippingDate; // ngày nhận hàng
+    @Column(name = "transaction_reference", unique = true, nullable = true)
+    private String transactionReference; // mã tham chiếu khi giao dịch thành công
+    private String shippingMethod;
+    private String shippingAddress;
+    private String trackingNumber;
+    private String paymentMethod; // phương thức thanh toán
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 
-    private String userId;
-
-    private String firstname; // bắt buộc
-
-    private String lastname;
-
-    private String country; // bắt buộc
-
-    private String address;// địa chỉ người nhận bắt buộc
-
-    private String town;
-
-    private String state;// tên khu vực
-
-    private long postCode;// mã bưu chính
-
-    private String email; // bắt buộc
-
-    private String phone; // băt buộc
-
-    private String note;// chú ý
-
-    private long totalPrice;
-
-    private String paymentmethod; // phương thức thanh toán
-
-    private String active;// trạng thái đơn hàng
-
-    @OneToMany(mappedBy="order")
-    @JsonBackReference
-    private Set<Cart> cart;
 }

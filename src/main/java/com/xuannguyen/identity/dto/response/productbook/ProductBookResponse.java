@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -46,6 +47,8 @@ public class ProductBookResponse {
 
     String metaKeywords;
 
+    Integer volumeNumber;
+
     String type;
 
     String categoryId;
@@ -71,4 +74,5 @@ public class ProductBookResponse {
     String bookFormat;
 
     String pdfFileId;
+    List<String> listImage;
 }

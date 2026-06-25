@@ -20,7 +20,6 @@ public class Banner {
 
     private String description;
 
-
     private String redirectUrl;
 
     private Integer sortOrder;

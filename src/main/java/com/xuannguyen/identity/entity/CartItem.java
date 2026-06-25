@@ -1,5 +1,6 @@
 package com.xuannguyen.identity.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,10 +16,15 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @ManyToOne
-    @JoinColumn(name = "cart_id")
+    @JoinColumn(name = "cart_id", nullable = false) // ánh xạ với cột `cart_id` trong database
+    @JsonBackReference
     private Cart cart;
-    private String productId; // map vơi id của bảng product của bên product service
-    private int quantity;
-    private BigDecimal price;
+    private String productId;
+    private String productName;
+    private BigDecimal productPrice;
+    private int productQuantity;
+    private long discountPercentage;
+    private BigDecimal totalPrice;
+    private Long userId;
 
 }

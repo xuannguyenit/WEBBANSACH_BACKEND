@@ -1,5 +1,6 @@
 package com.xuannguyen.identity.configuration;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+
 public class SecurityConfig {
 
     private static final String[] PUBLIC_ENDPOINTS = {
@@ -30,6 +32,7 @@ public class SecurityConfig {
     private static final String[] PUBLIC_GET_ENDPOINTS = {
             "/categories",
             "/images/*/view",
+            "/product-books"
     };
     private static final String[] SWAGGER_ENDPOINTS = {
             "/swagger-ui/**",

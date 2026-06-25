@@ -1,15 +1,24 @@
 package com.xuannguyen.identity.controller.productbook;
 
-import com.xuannguyen.identity.dto.request.productbook.ProductBookCreateRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xuannguyen.identity.dto.request.ApiResponse;
+import com.xuannguyen.identity.dto.request.productbook.ProductBookFullRequest;
+import com.xuannguyen.identity.dto.request.productbook.ProductBookRequest;
 import com.xuannguyen.identity.dto.request.productbook.ProductBookUpdateRequest;
+import com.xuannguyen.identity.dto.response.PageResponse;
+import com.xuannguyen.identity.dto.response.productbook.ProductBookImportResponse;
 import com.xuannguyen.identity.dto.response.productbook.ProductBookResponse;
 import com.xuannguyen.identity.service.productbook.ProductBookService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/product-books")
@@ -18,55 +27,67 @@ import org.springframework.web.bind.annotation.*;
 public class ProductBookController {
 
     ProductBookService productBookService;
+    private final ObjectMapper objectMapper;
 
     @PostMapping
-    public ProductBookResponse create(@Valid @RequestBody ProductBookCreateRequest request) {
-        return productBookService.create(request);
+    public ApiResponse<ProductBookResponse> create(@Valid @RequestBody ProductBookRequest request) {
+        return ApiResponse.<ProductBookResponse>builder()
+                .code(200)
+                .message("Product Book Created")
+                .result(productBookService.createProductBook(request))
+                .build();
     }
-
-    @PutMapping("/{id}")
-    public ProductBookResponse update(
-            @PathVariable String id,
-            @Valid @RequestBody ProductBookUpdateRequest request
-    ) {
-        return productBookService.update(id, request);
-    }
-
-    @GetMapping("/{id}")
-    public ProductBookResponse getById(@PathVariable String id) {
-        return productBookService.getById(id);
-    }
-
-    @GetMapping("/slug/{slug}")
-    public ProductBookResponse getBySlug(@PathVariable String slug) {
-        return productBookService.getBySlug(slug);
-    }
-
     @GetMapping
-    public Page<ProductBookResponse> getAll(
-            @RequestParam(defaultValue = "0") int page,
+    public ApiResponse<PageResponse<ProductBookResponse>> getAllProductBook(
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return productBookService.getAll(page, size);
+        return ApiResponse.<PageResponse<ProductBookResponse>>builder()
+                .result(productBookService.getAllProductPagination(page, size))
+                .build();
     }
+    @PostMapping(
+            value = "/full",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ApiResponse<ProductBookResponse> createFullProductBook(
+            @RequestPart("request") String requestJson,
 
-    @PatchMapping("/{id}/enable")
-    public ProductBookResponse enable(@PathVariable String id) {
-        return productBookService.enable(id);
+            @RequestPart(value = "thumbnail", required = false)
+            MultipartFile thumbnail,
+
+            @RequestPart(value = "images", required = false)
+            List<MultipartFile> images,
+
+            @RequestPart(value = "pdfFile", required = false)
+            MultipartFile pdfFile
+    ) throws JsonProcessingException {
+        ProductBookFullRequest request =
+                objectMapper.readValue(requestJson, ProductBookFullRequest.class);
+
+        return ApiResponse.<ProductBookResponse>builder()
+                .message("Create full product book successfully")
+                .result(productBookService.createFullProductBook(
+                        request,
+                        thumbnail,
+                        images,
+                        pdfFile
+                ))
+                .build();
     }
-
-    @PatchMapping("/{id}/disable")
-    public ProductBookResponse disable(@PathVariable String id) {
-        return productBookService.disable(id);
-    }
-
-    @PatchMapping("/{id}/view")
-    public ProductBookResponse increaseViewCount(@PathVariable String id) {
-        return productBookService.increaseViewCount(id);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
-        productBookService.delete(id);
+    @PostMapping(
+            value = "/import-excel",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ApiResponse<ProductBookImportResponse> importProductBooksFromExcel(
+            @RequestPart("file") MultipartFile file
+    ) {
+        return ApiResponse.<ProductBookImportResponse>builder()
+                .message("Import product books successfully")
+                .result(productBookService.importProductBooksFromExcel(file))
+                .build();
     }
 }
+
+
+

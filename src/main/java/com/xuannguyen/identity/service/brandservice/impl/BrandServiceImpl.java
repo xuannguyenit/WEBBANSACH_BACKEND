@@ -66,7 +66,7 @@ public class BrandServiceImpl implements BrandService {
 
         // Kiểm tra tên brand đã tồn tại chưa
         if (brandRepository.existsByName(brandName)) {
-            throw new AppException(ErrorCode.BRAND_NAME_ALREADY_EXISTSED);
+            throw new AppException(ErrorCode.BRAND_NAME_ALREADY_EXISTED);
         }
 
         Image image = null;
@@ -104,7 +104,7 @@ public class BrandServiceImpl implements BrandService {
 
         // Kiểm tra tên brand có bị trùng với brand khác không
         if (brandRepository.existsByNameAndIdNot(brandName, id)) {
-            throw new AppException(ErrorCode.BRAND_NAME_ALREADY_EXISTSED);
+            throw new AppException(ErrorCode.BRAND_NAME_ALREADY_EXISTED);
         }
 
         // Nếu có truyền avatarId thì cập nhật avatar

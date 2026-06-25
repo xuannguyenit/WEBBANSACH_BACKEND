@@ -38,39 +38,47 @@ public class UserService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
     KafkaTemplate<String, Object> kafkaTemplate;
-    public UserResponse createUser(UserCreationRequest request) {
-        // check user existed
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new AppException(ErrorCode.USER_EXISTED);
-        }
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new AppException(ErrorCode.EMAIL_EXISTED);
-        }
-        // generate code for user
-        String code = request.getUsername();
-        HashSet<Role> roles = new HashSet<>();
-        //set role mặc định cho user là USER_ROLE
-        Role role = roleRepository.findByCode(PredefinedRole.USER_ROLE_CODE)
-                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
-        roles.add(role);
 
-        User user = User.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .email(request.getEmail())
-                .code(code)
-                .roles(roles)
-                .build();
-        userRepository.save(user);
-        NotificationEvent notificationEvent = NotificationEvent.builder()
-                .channel("EMAIL")
-                .recipient(request.getEmail())
-                .subject("Welcome to My Shop")
-                .body("Hello, " + request.getUsername())
-                .build();
-        kafkaTemplate.send("notification-delivery",notificationEvent);
-        return userMapper.toUserResponse(user);
+public UserResponse createUser(UserCreationRequest request) {
+    if (userRepository.existsByUsername(request.getUsername())) {
+        throw new AppException(ErrorCode.USER_EXISTED);
     }
+
+    if (userRepository.existsByEmail(request.getEmail())) {
+        throw new AppException(ErrorCode.EMAIL_EXISTED);
+    }
+
+    String code = request.getUsername();
+
+    HashSet<Role> roles = new HashSet<>();
+
+    Role role = roleRepository.findByCode(PredefinedRole.USER_ROLE_CODE)
+            .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+
+    roles.add(role);
+
+    User user = User.builder()
+            .username(request.getUsername())
+            .password(passwordEncoder.encode(request.getPassword()))
+            .email(request.getEmail())
+            .code(code)
+            .roles(roles)
+            .build();
+
+    User savedUser = userRepository.save(user);
+
+    NotificationEvent notificationEvent = NotificationEvent.builder()
+            .channel("EMAIL")
+            .recipient(savedUser.getEmail())
+            .templateCode("USER_CREATED")
+            .subject("Welcome to My Shop")
+            .body("Hello, " + savedUser.getUsername())
+            .build();
+
+    kafkaTemplate.send("notification-delivery", notificationEvent);
+
+    return userMapper.toUserResponse(savedUser);
+}
 
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
